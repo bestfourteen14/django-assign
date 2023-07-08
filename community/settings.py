@@ -11,19 +11,26 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
+import os
 import pymysql
+import environ
+
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(DEBUG=(bool, False))
+
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@6cf7m%_9+8tr=*v__^s95-oqsvv5cit6ciasuzro=l(uv$ql8'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -94,11 +101,11 @@ WSGI_APPLICATION = 'community.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'DRF_assign',
-        'USER': 'root',
-        'PASSWORD': 'rycbar123',
-        'HOST': 'svc.sel4.cloudtype.app',
-        'PORT': '32235'
+        'NAME': env('db_name'),
+        'USER': env('db_user'),
+        'PASSWORD': env('db_password'),
+        'HOST': env('db_host'),
+        'PORT': env('db_port'),
     }
 }
 # Password validation
